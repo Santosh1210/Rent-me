@@ -1,126 +1,83 @@
-import pygame
-import random
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Car Animation</title>
+<style>
+body {
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #f0f0f0;
+}
 
-# Initialize Pygame
-pygame.init()
+.car {
+  width: 200px;
+  height: 100px;
+  background-color: #333;
+  position: relative;
+  border-radius: 10px;
+}
 
-# Set the screen dimensions
-SCREEN_WIDTH = 800
-SCREEN_HEIGHT = 600
+.body {
+  width: 160px;
+  height: 80px;
+  background-color: #ffce38;
+  position: absolute;
+  top: 10px;
+  left: 20px;
+}
 
-# Set colors
-WHITE = (255, 255, 255)
-RED = (255, 0, 0)
-GREEN = (0, 255, 0)
-BLACK = (0, 0, 0)
+.wheel {
+  width: 40px;
+  height: 40px;
+  background-color: #333;
+  position: absolute;
+  bottom: 0;
+  border-radius: 50%;
+}
 
-# Set snake and food sizes
-BLOCK_SIZE = 20
+.front-wheel {
+  left: 20px;
+}
 
-# Set snake speed
-SNAKE_SPEED = 10
+.back-wheel {
+  right: 20px;
+}
+</style>
+</head>
+<body>
 
-# Create the screen
-screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
-pygame.display.set_caption("Snake Game")
+<div class="car">
+  <div class="body"></div>
+  <div class="wheel front-wheel"></div>
+  <div class="wheel back-wheel"></div>
+</div>
 
-# Clock for controlling the game's frame rate
-clock = pygame.time.Clock()
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+  const car = document.querySelector('.car');
+  let carPosition = 0;
 
-# Function to draw the snake
-def draw_snake(snake_list):
-    for block in snake_list:
-        pygame.draw.rect(screen, GREEN, [block[0], block[1], BLOCK_SIZE, BLOCK_SIZE])
+  function moveCar() {
+    carPosition += 1;
+    car.style.transform = `translateX(${carPosition}px)`;
 
-# Function to display messages
-def display_message(msg, color, font_size):
-    font = pygame.font.SysFont(None, font_size)
-    screen_text = font.render(msg, True, color)
-    screen.blit(screen_text, [SCREEN_WIDTH / 6, SCREEN_HEIGHT / 3])
+    // Repeat animation
+    if (carPosition > window.innerWidth) {
+      carPosition = -200;
+    }
 
-# Main function for the game
-def gameLoop():
-    game_over = False
-    game_close = False
+    requestAnimationFrame(moveCar);
+  }
 
-    # Snake initial position and size
-    snake_list = []
-    snake_length = 1
+  moveCar();
+});
+</script>
 
-    # Snake initial position
-    x_snake = SCREEN_WIDTH / 2
-    y_snake = SCREEN_HEIGHT / 2
-
-    # Initial velocity
-    x_change = 0
-    y_change = 0
-
-    # Food position
-    food_x = round(random.randrange(0, SCREEN_WIDTH - BLOCK_SIZE) / BLOCK_SIZE) * BLOCK_SIZE
-    food_y = round(random.randrange(0, SCREEN_HEIGHT - BLOCK_SIZE) / BLOCK_SIZE) * BLOCK_SIZE
-
-    while not game_over:
-        while game_close == True:
-            screen.fill(WHITE)
-            display_message("Game Over! Press Q-Quit or C-Play Again", RED, 50)
-            pygame.display.update()
-
-            for event in pygame.event.get():
-                if event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_q:
-                        game_over = True
-                        game_close = False
-                    if event.key == pygame.K_c:
-                        gameLoop()
-
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                game_over = True
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_LEFT:
-                    x_change = -BLOCK_SIZE
-                    y_change = 0
-                elif event.key == pygame.K_RIGHT:
-                    x_change = BLOCK_SIZE
-                    y_change = 0
-                elif event.key == pygame.K_UP:
-                    y_change = -BLOCK_SIZE
-                    x_change = 0
-                elif event.key == pygame.K_DOWN:
-                    y_change = BLOCK_SIZE
-                    x_change = 0
-
-        # Boundaries check
-        if x_snake >= SCREEN_WIDTH or x_snake < 0 or y_snake >= SCREEN_HEIGHT or y_snake < 0:
-            game_close = True
-
-        x_snake += x_change
-        y_snake += y_change
-        screen.fill(WHITE)
-        pygame.draw.rect(screen, RED, [food_x, food_y, BLOCK_SIZE, BLOCK_SIZE])
-
-        snake_head = []
-        snake_head.append(x_snake)
-        snake_head.append(y_snake)
-        snake_list.append(snake_head)
-        if len(snake_list) > snake_length:
-            del snake_list[0]
-
-        for segment in snake_list[:-1]:
-            if segment == snake_head:
-                game_close = True
-
-        draw_snake(snake_list)
-        pygame.display.update()
-
-        if x_snake == food_x and y_snake == food_y:
-            food_x = round(random.randrange(0, SCREEN_WIDTH - BLOCK_SIZE) / BLOCK_SIZE) * BLOCK_SIZE
-            food_y = round(random.randrange(0, SCREEN_HEIGHT - BLOCK_SIZE) / BLOCK_SIZE) * BLOCK_SIZE
-            snake_length += 1
-
-        clock.tick(SNAKE_SPEED)
-
-    pygame.quit()
-    quit()
-
-gameLoop()
+</body>
+</html>
