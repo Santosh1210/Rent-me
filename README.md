@@ -1,4 +1,4 @@
-# 💫 About Rent me:
+# 💫 About Rent-me:
 "Rent Me" is a comprehensive online platform designed to facilitate the rental process for both renters and property owners. Our user-friendly interface offers a seamless experience, allowing users to search for available rental properties, submit rental applications, and manage leases with ease.
 
 For Renters:
